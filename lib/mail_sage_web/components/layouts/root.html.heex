@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-50">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title suffix=" · MailSage">
+      {assigns[:page_title] || "Home"}
+    </.live_title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+  </head>
+  <body class="h-full">
+    <div class="min-h-full">
+      <nav class="border-b border-gray-200 bg-white">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex h-16 justify-between">
+            <div class="flex">
+              <div class="flex flex-shrink-0 items-center">
+                <img class="block h-8 w-auto" src={~p"/images/logo.svg"} alt="MailSage" />
+              </div>
+              <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <%= if @current_user do %>
+                  <.link
+                    navigate={~p"/dashboard"}
+                    class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  >
+                    Dashboard
+                  </.link>
+                <% end %>
+              </div>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:items-center">
+              <%= if @current_user do %>
+                <div class="relative ml-3">
+                  <div>
+                    <button
+                      type="button"
+                      class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      id="user-menu-button"
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      phx-click={show_dropdown("#user-menu")}
+                    >
+                      <span class="sr-only">Open user menu</span>
+                      <img
+                        class="h-8 w-8 rounded-full"
+                        src={@current_user.google_user_image}
+                        alt="Google user image"
+                      />
+                    </button>
+                  </div>
+                  <div
+                    class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu-button"
+                    tabindex="-1"
+                    id="user-menu"
+                  >
+                    <.link
+                      href={~p"/logout"}
+                      method="delete"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                      tabindex="-1"
+                    >
+                      Sign out
+                    </.link>
+                  </div>
+                </div>
+              <% else %>
+                <.link
+                  navigate={~p"/auth/google"}
+                  class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Sign in with Google
+                </.link>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="py-10">
+        <main>
+          <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            {@inner_content}
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
