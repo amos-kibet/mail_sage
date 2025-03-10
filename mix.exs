@@ -64,7 +64,7 @@ defmodule MailSage.MixProject do
       {:html_sanitize_ex, "~> 1.4"},
       {:oauth2, "~> 2.1"},
       {:scrivener_ecto, "~> 3.1"},
-      {:wallaby, "~> 0.30.10"},
+      # {:wallaby, "~> 0.30.10"},
       {:styler, "~> 1.4"}
     ]
   end
