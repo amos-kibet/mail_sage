@@ -16,7 +16,7 @@ defmodule MailSage.Unsubscribe.Agent do
   require Logger
 
   @retry_attempts 3
-  @timeout to_timeout(minute: 5)
+  @timeout 5 * 60
 
   defmodule State do
     @moduledoc false

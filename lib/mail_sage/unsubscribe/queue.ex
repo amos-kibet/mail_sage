@@ -10,7 +10,7 @@ defmodule MailSage.Unsubscribe.Queue do
   require Logger
 
   @max_concurrent_jobs 5
-  @queue_check_interval to_timeout(second: 5)
+  @queue_check_interval 5 * 60
 
   # Client API
 
