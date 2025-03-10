@@ -1,6 +1,6 @@
 # MailSage
 
-MailSage is an AI-powered email management system that helps you organize and manage your Gmail inbox efficiently. The application uses AI to automatically categorize and summarize emails, making it easier to process and manage large volumes of email.
+**MailSage** is an AI-powered email management system that helps you organize and manage your Gmail inbox efficiently. The application uses AI to automatically categorize and summarize emails, making it easier to process and manage large volumes of email.
 
 ![Homepage](priv/static/images/screen1.png)
 ![Dashboard](priv/static/images/screen2.png)
