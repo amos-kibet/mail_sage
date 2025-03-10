@@ -101,7 +101,6 @@ mix test
 2. Some LiveView tests are pending implementation
 3. Email sync process needs optimization for large inboxes
 4. Token refresh mechanism needs additional error handling
-5. Scheduler implementation needs improvement for user identification
 
 ## Security Notes
 

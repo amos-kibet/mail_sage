@@ -84,4 +84,11 @@ defmodule MailSage.Accounts do
     |> GmailAccount.changeset(attrs)
     |> Repo.insert()
   end
+
+  @doc """
+  Returns a list of users who have sync enabled on their Gmail accounts.
+  """
+  def list_users_with_sync_enabled do
+    Repo.all(from(u in User, join: g in assoc(u, :gmail_accounts), where: g.sync_enabled == true, distinct: true))
+  end
 end

@@ -8,6 +8,8 @@ defmodule MailSageWeb.DashboardLive do
 
   require Logger
 
+  on_mount {MailSageWeb.LiveView.Hooks.SyncHooks, :sync}
+
   @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     updated_socket =

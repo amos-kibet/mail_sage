@@ -280,4 +280,59 @@ defmodule MailSage.AccountsTest do
       assert "has invalid format" in errors_on(changeset).email
     end
   end
+
+  describe "list_users_with_sync_enabled/0" do
+    test "returns users who have at least one gmail account with sync enabled" do
+      # Create a user with sync enabled gmail account
+      user1 = insert(:user)
+      insert(:gmail_account, user: user1, sync_enabled: true)
+
+      # Create another user with sync enabled gmail account
+      user2 = insert(:user)
+      insert(:gmail_account, user: user2, sync_enabled: true)
+
+      # Create a user with sync disabled gmail account
+      user3 = insert(:user)
+      insert(:gmail_account, user: user3, sync_enabled: false)
+
+      users = Accounts.list_users_with_sync_enabled()
+
+      assert length(users) == 2
+      assert users |> Enum.map(& &1.id) |> Enum.sort() == Enum.sort([user1.id, user2.id])
+    end
+
+    test "returns user only once even with multiple sync enabled accounts" do
+      user = insert(:user)
+
+      # Add multiple Gmail accounts with sync enabled
+      insert(:gmail_account, user: user, sync_enabled: true)
+      insert(:gmail_account, user: user, sync_enabled: true)
+
+      users = Accounts.list_users_with_sync_enabled()
+
+      assert length(users) == 1
+      assert hd(users).id == user.id
+    end
+
+    test "returns empty list when no users have sync enabled accounts" do
+      # Create a user with sync disabled gmail account
+      user = insert(:user)
+      insert(:gmail_account, user: user, sync_enabled: false)
+
+      assert Accounts.list_users_with_sync_enabled() == []
+    end
+
+    test "returns user if at least one gmail account has sync enabled" do
+      user = insert(:user)
+
+      # Add one Gmail account with sync enabled and one disabled
+      insert(:gmail_account, user: user, sync_enabled: true)
+      insert(:gmail_account, user: user, sync_enabled: false)
+
+      users = Accounts.list_users_with_sync_enabled()
+
+      assert length(users) == 1
+      assert hd(users).id == user.id
+    end
+  end
 end

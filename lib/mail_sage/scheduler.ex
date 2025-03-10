@@ -5,32 +5,22 @@ defmodule MailSage.Scheduler do
 
   use Quantum, otp_app: :mail_sage
 
+  alias MailSage.Accounts
   alias MailSage.EmailSync
 
   require Logger
 
   @doc """
-  Schedules email sync for the current user.
+  Syncs emails for all users with sync enabled.
   Runs every minute by default.
   """
   def sync_emails do
-    :ok =
-      Phoenix.PubSub.subscribe(MailSage.PubSub, "user:*")
+    Logger.info("#{__MODULE__}.sync_emails/0: Starting email sync")
 
-    receive do
-      {:current_user_id, user_id} ->
-        Logger.info("#{__MODULE__}.sync_emails/0: Scheduling email sync for user #{user_id}")
-        EmailSync.schedule_sync(user_id)
-
-      other ->
-        Logger.warning("#{__MODULE__}.sync_emails/0: Received unexpected message: #{inspect(other)}")
-    after
-      5000 ->
-        # TODO: Continue from here; we don't receive the user ID in the last 5 seconds
-        # Timeout after 5 seconds if no user ID received
-
-        Logger.warning("#{__MODULE__}.sync_emails/0: No user ID received in the last 5 seconds")
-        :timeout
-    end
+    # Get all users with sync enabled
+    Enum.each(Accounts.list_users_with_sync_enabled(), fn user ->
+      Logger.info("#{__MODULE__}.sync_emails/0: Scheduling email sync for user #{user.id}")
+      EmailSync.schedule_sync(user.id)
+    end)
   end
 end
